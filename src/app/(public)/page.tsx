@@ -36,15 +36,21 @@ export default async function HomePage() {
             <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
               Connect with verified subject-matter experts for 1-on-1 home guidance or interactive online batches across Physics, Math, Programming, and IELTS.
             </p>
-            <div className="flex flex-wrap gap-4 pt-2">
-              <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                <Link href="/tuitions">
-                  <Search className="mr-2 h-4 w-4" /> Browse Tuitions
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+                <Link
+                    href="/tuitions"
+                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm transition-colors"
+                >
+                    <Search className="h-4 w-4 shrink-0" />
+                    <span>Browse Tuitions</span>
                 </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link href="/sign-up">Become a Tutor</Link>
-              </Button>
+
+                <Link
+                    href="/sign-up"
+                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-lg border border-input bg-background hover:bg-muted font-semibold text-sm transition-colors"
+                >
+                    <span>Become a Tutor</span>
+                </Link>
             </div>
           </div>
 
