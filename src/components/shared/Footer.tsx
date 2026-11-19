@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { GraduationCap, Mail, Phone, MapPin } from "lucide-react";
-
+import CurrentYear from "./CurrentYear";
 export default function Footer() {
   return (
     <footer className="border-t bg-muted/40 mt-auto">
@@ -71,8 +71,8 @@ export default function Footer() {
       </div>
 
       <div className="border-t py-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} MentorLagbe. All rights reserved.
-      </div>
+        © <CurrentYear /> MentorLagbe. All rights reserved.
+    </div>
     </footer>
   );
 }
