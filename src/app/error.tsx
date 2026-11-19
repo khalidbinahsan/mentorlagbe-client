@@ -12,9 +12,12 @@ export default function ErrorPage({ reset }: { error: Error; reset: () => void }
         <Button variant="outline" onClick={() => reset()}>
           Try Again
         </Button>
-        <Button asChild className="bg-emerald-600 hover:bg-emerald-700 text-white">
-          <Link href="/">Back to Home</Link>
-        </Button>
+        <Link
+          href="/"
+          className="inline-flex items-center justify-center h-10 px-5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm"
+        >
+          Back to Home
+        </Link>
       </div>
     </div>
   );

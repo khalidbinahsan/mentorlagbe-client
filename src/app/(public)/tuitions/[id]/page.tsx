@@ -196,10 +196,8 @@ export default function TuitionDetailsPage() {
                 </div>
               ) : (
                 <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold">
-                      <CheckCircle2 className="mr-2 h-4 w-4" /> Apply Now
-                    </Button>
+                  <DialogTrigger className="inline-flex items-center justify-center gap-2 w-full h-10 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm cursor-pointer">
+                    <CheckCircle2 className="h-4 w-4" /> Apply Now
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>

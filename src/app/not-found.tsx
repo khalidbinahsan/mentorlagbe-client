@@ -9,9 +9,12 @@ export default function NotFound() {
       <p className="mt-2 max-w-md text-muted-foreground">
         The page or tuition listing you are looking for doesn&apos;t exist or has been removed.
       </p>
-      <Button asChild className="mt-6 bg-emerald-600 hover:bg-emerald-700 text-white">
-        <Link href="/">Back to Home</Link>
-      </Button>
+      <Link
+        href="/"
+        className="mt-6 inline-flex items-center justify-center h-10 px-6 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm"
+      >
+        Back to Home
+      </Link>
     </div>
   );
 }

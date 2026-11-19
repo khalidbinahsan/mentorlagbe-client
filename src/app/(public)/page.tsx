@@ -73,11 +73,13 @@ export default async function HomePage() {
               Explore recently approved courses from verified mentors across Bangladesh and online.
             </p>
           </div>
-          <Button asChild variant="outline">
-            <Link href="/tuitions">
-              View All Tuitions <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <Link
+            href="/tuitions"
+            className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg border border-input bg-background hover:bg-muted text-sm font-medium"
+          >
+            <span>View All Tuitions</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
 
         {featuredTuitions.length > 0 ? (
@@ -212,9 +214,12 @@ export default async function HomePage() {
                 <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-600" /> Real-time application tracking</div>
               </CardContent>
               <CardFooter>
-                <Button asChild variant="outline" className="w-full">
-                  <Link href="/sign-up">Get Started Free</Link>
-                </Button>
+                <Link
+                  href="/sign-up"
+                  className="inline-flex items-center justify-center w-full h-10 px-4 rounded-lg border border-input bg-background hover:bg-muted text-sm font-medium"
+                >
+                  Get Started Free
+                </Link>
               </CardFooter>
             </Card>
 
@@ -231,9 +236,12 @@ export default async function HomePage() {
                 <div className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-emerald-600" /> Unlimited batch applications</div>
               </CardContent>
               <CardFooter>
-                <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
-                  <Link href="/pricing">Subscribe with Stripe</Link>
-                </Button>
+                <Link
+                  href="/pricing"
+                  className="inline-flex items-center justify-center w-full h-10 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold"
+                >
+                  Subscribe with Stripe
+                </Link>
               </CardFooter>
             </Card>
 
@@ -250,9 +258,12 @@ export default async function HomePage() {
                 <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-emerald-600" /> Verified Pro Educator badge</div>
               </CardContent>
               <CardFooter>
-                <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
-                  <Link href="/pricing">Subscribe with Stripe</Link>
-                </Button>
+                <Link
+                  href="/pricing"
+                  className="inline-flex items-center justify-center w-full h-10 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold"
+                >
+                  Subscribe with Stripe
+                </Link>
               </CardFooter>
             </Card>
           </div>

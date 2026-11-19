@@ -136,12 +136,18 @@ export default function Navbar() {
           <div className="pt-2 border-t flex flex-col gap-2">
             {!user ? (
               <>
-                <Button variant="outline" asChild className="w-full">
-                  <Link href="/sign-in">Sign In</Link>
-                </Button>
-                <Button asChild className="w-full bg-emerald-600 text-white">
-                  <Link href="/sign-up">Sign Up</Link>
-                </Button>
+                <Link
+                  href="/sign-in"
+                  className="inline-flex items-center justify-center h-9 px-4 rounded-lg border border-input bg-background hover:bg-muted text-sm font-medium"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="inline-flex items-center justify-center h-9 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium"
+                >
+                  Sign Up
+                </Link>
               </>
             ) : (
               <>

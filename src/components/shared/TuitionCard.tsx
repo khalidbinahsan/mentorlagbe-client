@@ -63,9 +63,12 @@ export default function TuitionCard({ tuition }: { tuition: TuitionItem }) {
           <span className="text-lg font-extrabold text-foreground">৳{tuition.monthlyFee}</span>
           <span className="text-xs text-muted-foreground"> /month</span>
         </div>
-        <Button asChild size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
-          <Link href={`/tuitions/${tuition._id}`}>View Details</Link>
-        </Button>
+        <Link
+          href={`/tuitions/${tuition._id}`}
+          className="inline-flex items-center justify-center h-8 px-3.5 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors"
+        >
+          View Details
+        </Link>
       </CardFooter>
     </Card>
   );
