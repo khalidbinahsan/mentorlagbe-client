@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { GraduationCap, Sun, Moon, Menu, X } from "lucide-react";
 import { useState } from "react";
@@ -28,6 +28,7 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { theme, setTheme } = useTheme();
   const { user, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -74,38 +75,48 @@ export default function Navbar() {
 
           {!user ? (
             <>
-              <Button variant="outline" asChild>
-                <Link href="/sign-in">Sign In</Link>
-              </Button>
-              <Button asChild className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                <Link href="/sign-up">Sign Up</Link>
-              </Button>
+              <Link
+                href="/sign-in"
+                className="inline-flex items-center justify-center h-9 px-4 rounded-lg border border-input bg-background hover:bg-muted text-sm font-medium transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/sign-up"
+                className="inline-flex items-center justify-center h-9 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors"
+              >
+                Sign Up
+              </Link>
             </>
           ) : (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-2.5 rounded-full border p-1 pr-3 hover:bg-muted transition">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.image} alt={user.name} />
-                    <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
-                  </Avatar>
-                  <span className="text-sm font-medium">{user.name}</span>
-                  <Badge
-                    variant="secondary"
-                    className="capitalize text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
-                  >
-                    {user.role}
-                  </Badge>
-                </button>
+              <DropdownMenuTrigger className="flex items-center gap-2.5 rounded-full border p-1 pr-3 hover:bg-muted transition cursor-pointer outline-none">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user.image} alt={user.name} />
+                  <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <span className="text-sm font-medium">{user.name}</span>
+                <Badge
+                  variant="secondary"
+                  className="capitalize text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
+                >
+                  {user.role}
+                </Badge>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">
                 <DropdownMenuLabel>My Account ({user.plan.toUpperCase()})</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href={`/dashboard/${user.role}`}>Dashboard</Link>
+                <DropdownMenuItem
+                  onClick={() => router.push(`/dashboard/${user.role}`)}
+                  className="cursor-pointer"
+                >
+                  Dashboard
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/profile">Update Profile</Link>
+                <DropdownMenuItem
+                  onClick={() => router.push("/dashboard/profile")}
+                  className="cursor-pointer"
+                >
+                  Update Profile
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer">
@@ -138,23 +149,33 @@ export default function Navbar() {
               <>
                 <Link
                   href="/sign-in"
-                  className="inline-flex items-center justify-center h-9 px-4 rounded-lg border border-input bg-background hover:bg-muted text-sm font-medium"
+                  onClick={() => setMobileOpen(false)}
+                  className="inline-flex items-center justify-center w-full h-10 rounded-lg border border-input bg-background hover:bg-muted text-sm font-medium"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/sign-up"
-                  className="inline-flex items-center justify-center h-9 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium"
+                  onClick={() => setMobileOpen(false)}
+                  className="inline-flex items-center justify-center w-full h-10 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium"
                 >
                   Sign Up
                 </Link>
               </>
             ) : (
               <>
-                <Link href={`/dashboard/${user.role}`} className="py-1.5 text-sm font-semibold text-emerald-600">
+                <Link
+                  href={`/dashboard/${user.role}`}
+                  onClick={() => setMobileOpen(false)}
+                  className="py-1.5 text-sm font-semibold text-emerald-600"
+                >
                   Dashboard ({user.role})
                 </Link>
-                <Link href="/dashboard/profile" className="py-1.5 text-sm">
+                <Link
+                  href="/dashboard/profile"
+                  onClick={() => setMobileOpen(false)}
+                  className="py-1.5 text-sm"
+                >
                   Update Profile
                 </Link>
                 <Button variant="destructive" size="sm" onClick={handleSignOut}>
