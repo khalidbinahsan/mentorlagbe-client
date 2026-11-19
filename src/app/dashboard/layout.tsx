@@ -113,7 +113,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* User Profile Summary */}
         <div className="p-4 border-b flex items-center gap-3">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={user.image} alt={user.name} />
+            <AvatarImage
+              src={user.image || undefined}
+              alt={user.name}
+              referrerPolicy="no-referrer"
+              className="object-cover"
+            />
             <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className="overflow-hidden">

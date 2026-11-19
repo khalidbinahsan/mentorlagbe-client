@@ -71,12 +71,20 @@ export default function UpdateProfilePage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="flex items-center gap-4">
               <Avatar className="h-20 w-20 border">
-                <AvatarImage src={image} alt={name} />
+                <AvatarImage
+                  src={image || undefined}
+                  alt={name}
+                  referrerPolicy="no-referrer"
+                  className="object-cover"
+                />
                 <AvatarFallback className="text-xl">{name?.charAt(0).toUpperCase()}</AvatarFallback>
               </Avatar>
 
               <div className="space-y-1.5">
-                <Label htmlFor="avatar-upload" className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border bg-background hover:bg-muted text-sm font-medium">
+                <Label
+                  htmlFor="avatar-upload"
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border bg-background hover:bg-muted text-sm font-medium"
+                >
                   <Upload className="h-4 w-4 text-emerald-600" />
                   {uploading ? "Uploading..." : "Upload New Photo (ImgBB)"}
                 </Label>
@@ -88,7 +96,9 @@ export default function UpdateProfilePage() {
                   onChange={handleFileChange}
                   disabled={uploading}
                 />
-                <p className="text-xs text-muted-foreground">JPG, PNG or WebP directly uploaded via ImgBB API</p>
+                <p className="text-xs text-muted-foreground">
+                  JPG, PNG or WebP directly uploaded via ImgBB API
+                </p>
               </div>
             </div>
 
@@ -104,7 +114,12 @@ export default function UpdateProfilePage() {
 
             <div className="space-y-1.5">
               <Label htmlFor="phone">Phone Number</Label>
-              <Input id="phone" placeholder="+88017XXXXXXXX" value={phone} onChange={(e) => setPhone(e.target.value)} />
+              <Input
+                id="phone"
+                placeholder="+88017XXXXXXXX"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
             </div>
 
             <div className="space-y-1.5">
@@ -118,7 +133,11 @@ export default function UpdateProfilePage() {
               />
             </div>
 
-            <Button type="submit" disabled={saving || uploading} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+            <Button
+              type="submit"
+              disabled={saving || uploading}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
               {saving ? "Saving..." : "Save Changes"}
             </Button>
           </form>

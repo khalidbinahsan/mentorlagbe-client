@@ -3,20 +3,22 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { GraduationCap, Sun, Moon, Menu, X } from "lucide-react";
-import { useState } from "react";
+import {
+  GraduationCap,
+  Sun,
+  Moon,
+  Menu,
+  X,
+  LayoutDashboard,
+  UserCog,
+  LogOut,
+  ChevronDown,
+} from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/providers/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 
 const navLinks = [
@@ -32,10 +34,25 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const { user, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSignOut = async () => {
+    setProfileOpen(false);
+    setMobileOpen(false);
     await signOut();
     toast.success("Signed out successfully");
+    router.push("/");
   };
 
   return (
@@ -89,10 +106,19 @@ export default function Navbar() {
               </Link>
             </>
           ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-2.5 rounded-full border p-1 pr-3 hover:bg-muted transition cursor-pointer outline-none">
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setProfileOpen((prev) => !prev)}
+                className="flex items-center gap-2.5 rounded-full border p-1 pr-3 hover:bg-muted transition cursor-pointer"
+              >
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user.image} alt={user.name} />
+                  <AvatarImage
+                    src={user.image || undefined}
+                    alt={user.name}
+                    referrerPolicy="no-referrer"
+                    className="object-cover"
+                  />
                   <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <span className="text-sm font-medium">{user.name}</span>
@@ -102,28 +128,56 @@ export default function Navbar() {
                 >
                   {user.role}
                 </Badge>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-52">
-                <DropdownMenuLabel>My Account ({user.plan.toUpperCase()})</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => router.push(`/dashboard/${user.role}`)}
-                  className="cursor-pointer"
-                >
-                  Dashboard
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => router.push("/dashboard/profile")}
-                  className="cursor-pointer"
-                >
-                  Update Profile
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer">
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <ChevronDown
+                  className={`h-4 w-4 text-muted-foreground transition-transform ${
+                    profileOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {profileOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-xl border bg-popover text-popover-foreground shadow-lg py-1.5 z-50">
+                  <div className="px-3.5 py-2 border-b">
+                    <p className="text-sm font-semibold truncate">{user.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                    <span className="mt-1 inline-block text-[10px] font-bold uppercase tracking-wider text-emerald-600">
+                      Plan: {user.plan}
+                    </span>
+                  </div>
+
+                  <div className="py-1">
+                    <Link
+                      href={`/dashboard/${user.role}`}
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-2.5 px-3.5 py-2 text-sm hover:bg-muted transition-colors"
+                    >
+                      <LayoutDashboard className="h-4 w-4 text-emerald-600" />
+                      <span>Dashboard</span>
+                    </Link>
+
+                    <Link
+                      href="/dashboard/profile"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-2.5 px-3.5 py-2 text-sm hover:bg-muted transition-colors"
+                    >
+                      <UserCog className="h-4 w-4 text-emerald-600" />
+                      <span>Update Profile</span>
+                    </Link>
+                  </div>
+
+                  <div className="border-t pt-1">
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="flex w-full items-center gap-2.5 px-3.5 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </div>
 

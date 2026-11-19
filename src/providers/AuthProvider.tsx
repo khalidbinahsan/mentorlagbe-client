@@ -40,7 +40,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const { data } = await api.post("/api/jwt");
       localStorage.setItem("mentorlagbe_token", data.token);
-      setUser(data.user);
+      setUser({
+        ...data.user,
+        image: data.user.image || session.user.image || "",
+      });
     } catch {
       setUser(null);
     } finally {
