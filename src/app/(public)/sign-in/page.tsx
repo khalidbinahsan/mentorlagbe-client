@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { useAuth } from "@/providers/AuthProvider";
+import api from "@/lib/axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,38 +13,60 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { toast } from "sonner";
 
 export default function SignInPage() {
-  const router = useRouter();
+  const { user, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  // Automatically redirect to the user's role dashboard once authenticated
+  useEffect(() => {
+    if (!isLoading && user?.role) {
+      window.location.replace(`/dashboard/${user.role}`);
+    }
+  }, [user, isLoading]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const { data, error } = await authClient.signIn.email({
-      email,
-      password,
-    });
+    try {
+      const res = await authClient.signIn.email({
+        email,
+        password,
+      });
 
-    setLoading(false);
+      if (res?.error) {
+        setLoading(false);
+        return toast.error(res.error.message || "Invalid email or password");
+      }
 
-    if (error) {
-      return toast.error(error.message || "Invalid email or password");
+      // Fetch exact user role from /api/jwt so admin/tutor/student redirects accurately
+      let role = (res?.data?.user as { role?: string })?.role;
+      if (!role) {
+        try {
+          const { data } = await api.post("/api/jwt");
+          if (data?.token) localStorage.setItem("mentorlagbe_token", data.token);
+          role = data?.user?.role;
+        } catch {
+          role = "student";
+        }
+      }
+
+      toast.success("Signed in successfully!");
+      window.location.assign(`/dashboard/${role || "student"}`);
+    } catch {
+      setLoading(false);
+      toast.error("Something went wrong while signing in");
     }
-
-    toast.success("Signed in successfully!");
-    const userRole = (data?.user as { role?: string })?.role || "student";
-    router.push(`/dashboard/${userRole}`);
   };
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     const { error } = await authClient.signIn.social({
       provider: "google",
-      callbackURL: `${window.location.origin}/`,
+      callbackURL: `${window.location.origin}/sign-in`,
     });
     if (error) {
       setGoogleLoading(false);

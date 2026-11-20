@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [jwtLoading, setJwtLoading] = useState(true);
 
-  const syncTokenAndUser = useCallback(async () => {
+ const syncTokenAndUser = useCallback(async () => {
     if (!session?.user) {
       localStorage.removeItem("mentorlagbe_token");
       setUser(null);
@@ -37,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    setJwtLoading(true);
     try {
       const { data } = await api.post("/api/jwt");
       localStorage.setItem("mentorlagbe_token", data.token);
@@ -45,7 +46,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         image: data.user.image || session.user.image || "",
       });
     } catch {
-      setUser(null);
+      // Fallback to session user if JWT sync fails so the user isn't kicked out
+      const sUser = session.user as Partial<UserProfile>;
+      setUser({
+        name: sUser.name || "User",
+        email: sUser.email || "",
+        image: sUser.image || "",
+        role: (sUser.role as UserProfile["role"]) || "student",
+        plan: (sUser.plan as UserProfile["plan"]) || "free",
+      });
     } finally {
       setJwtLoading(false);
     }
